@@ -1,0 +1,1632 @@
+package com.client;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.PixelGrabber;
+import java.awt.image.Raster;
+import java.io.*;
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+
+import com.client.collection.EvictingDualNodeHashTable;
+import com.client.draw.ImageCache;
+import com.client.engine.impl.MouseHandler;
+import com.client.graphics.SpriteData;
+import com.client.js5.Js5List;
+import com.client.sign.Signlink;
+import com.client.utilities.FileUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.util.AssetUtils;
+import net.runelite.rs.api.RSSpritePixels;
+
+public final class Sprite extends Rasterizer2D implements RSSpritePixels {
+
+	public Sprite(int i, int j) {
+		myPixels = new int[i * j];
+		myWidth = maxWidth = i;
+		myHeight = maxHeight = j;
+		drawOffsetX = drawOffsetY = 0;
+	}
+
+	public Sprite(byte[] data, int file) {
+		try {
+
+			InputStream is = new ByteArrayInputStream(data);
+			BufferedImage image = ImageIO.read(is);
+
+			myWidth = image.getWidth();
+			myHeight = image.getHeight();
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			drawOffsetX = 0;
+			drawOffsetY = 0;
+			myPixels = new int[myWidth * myHeight];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
+			pixelgrabber.grabPixels();
+			Color color = Color.MAGENTA;
+			setTransparency(color.getRed(), color.getGreen(), color.getBlue());
+		} catch(Exception _ex) {
+			System.out.println("Could not load Image: " + file);
+			_ex.printStackTrace();
+		}
+	}
+
+	public Sprite(int width, int height, int offsetX, int offsetY, byte[] data) {
+		try {
+			Image image = Toolkit.getDefaultToolkit().createImage(data);
+			this.myWidth = width;
+			this.myHeight = height;
+			this.maxWidth = width;
+			this.maxHeight = height;
+			this.drawOffsetX = offsetX;
+			this.drawOffsetY = offsetY;
+
+			myPixels = new int[width * height];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, width, height, myPixels, 0, width);
+			pixelgrabber.grabPixels();
+
+			Color color = Color.MAGENTA;
+			setTransparency(color.getRed(), color.getGreen(), color.getBlue());
+		} catch(Exception _ex) {
+			_ex.printStackTrace();
+		}
+	}
+
+
+	public Sprite(int width, int height, int offsetX, int offsetY, int[] pixels) {
+		this.myWidth = width;
+		this.myHeight = height;
+		this.drawOffsetX = offsetX;
+		this.drawOffsetY = offsetY;
+		this.myPixels = pixels;
+
+		Color color = Color.MAGENTA;
+		setTransparency(color.getRed(), color.getGreen(), color.getBlue());
+	}
+
+	public Sprite(int[] pixels,int width, int height) {
+		this.myWidth = width;
+		this.myHeight = height;
+		this.drawOffsetX = 0;
+		this.drawOffsetY = 0;
+		this.myPixels = pixels;
+
+		Color color = Color.MAGENTA;
+		setTransparency(color.getRed(), color.getGreen(), color.getBlue());
+	}
+
+	public Sprite(URL url) {
+		try {
+			if(url == null) {
+				return;
+			}
+			BufferedImage image = ImageIO.read(url.openStream());
+
+			myWidth = image.getWidth();
+			myHeight = image.getHeight();
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			drawOffsetX = 0;
+			drawOffsetY = 0;
+			myPixels = new int[myWidth * myHeight];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
+			pixelgrabber.grabPixels();
+			setTransparency(255, 0, 255);
+		} catch(Exception exception) {
+			System.out.println(exception);
+		}
+	}
+
+	public Sprite(URL url, int grayAmt) {
+		try {
+			if (url == null) {
+				return;
+			}
+			BufferedImage image = ImageIO.read(url.openStream());
+
+			myWidth = image.getWidth();
+			myHeight = image.getHeight();
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			drawOffsetX = 0;
+			drawOffsetY = 0;
+			myPixels = new int[myWidth * myHeight];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
+			pixelgrabber.grabPixels();
+
+			// Process the pixels for grayscaling
+			processPixelsForGrayscale(grayAmt);
+
+			setTransparency(255, 0, 255);
+		} catch (Exception exception) {
+			System.out.println(exception);
+		}
+	}
+
+	private void processPixelsForGrayscale(int grayAmt) {
+		for (int i = 0; i < myPixels.length; i++) {
+			int row = i / myWidth; // Calculate the current row for the pixel
+
+			// Only process pixels that are within 80 pixels from the bottom
+			if (row >= myHeight - grayAmt) {
+				int pixel = myPixels[i];
+				int alpha = (pixel >> 24) & 0xff;
+				int red = (pixel >> 16) & 0xff;
+				int green = (pixel >> 8) & 0xff;
+				int blue = pixel & 0xff;
+
+				// Convert to grayscale using a simple average
+				int grayLevel = (red + green + blue) / 3;
+				int gray = (alpha << 24) | (grayLevel << 16) | (grayLevel << 8) | grayLevel;
+
+				myPixels[i] = gray;
+			}
+		}
+	}
+	public static final Sprite EMPTY_SPRITE = new Sprite();
+
+	Sprite(){}
+
+	public void highlight(int color) {
+		if (this == EMPTY_SPRITE) {
+			return;
+		}
+		int[] raster = new int[myWidth * myHeight];
+		int start = 0;
+		for (int y = 0; y < myHeight; y++) {
+			for (int x = 0; x < myWidth; x++) {
+				int outline = myPixels[start];
+				if (outline == 0) {
+					if (x > 0 && myPixels[start - 1] != 0) {
+						outline = color;
+					} else if (y > 0 && myPixels[start - myWidth] != 0) {
+						outline = color;
+					} else if (x < myWidth - 1 && myPixels[start + 1] != 0) {
+						outline = color;
+					} else if (y < myHeight - 1 && myPixels[start + myWidth] != 0) {
+						outline = color;
+					}
+				}
+				raster[start++] = outline;
+			}
+		}
+		myPixels = raster;
+	}
+
+	public static String location = null;
+
+
+	public static void start() {
+//		if (Configuration.developerMode && new File("./sprites/").exists()) {
+//			location = "./sprites/";
+//		} else {
+		location = Signlink.getCacheDirectory() + "sprites/";
+		//}
+	}
+
+
+	public void outline(int color) {
+		if (this == EMPTY_SPRITE) {
+			return;
+		}
+		int[] raster = new int[myWidth * myHeight];
+		int start = 0;
+		for (int y = 0; y < myHeight; y++) {
+			for (int x = 0; x < myWidth; x++) {
+				int outline = myPixels[start];
+				if (outline == 0) {
+					if (x > 0 && myPixels[start - 1] != 0) {
+						outline = color;
+					} else if (y > 0 && myPixels[start - myWidth] != 0) {
+						outline = color;
+					} else if (x < myWidth - 1 && myPixels[start + 1] != 0) {
+						outline = color;
+					} else if (y < myHeight - 1 && myPixels[start + myWidth] != 0) {
+						outline = color;
+					}
+				}
+				raster[start++] = outline;
+			}
+		}
+		myPixels = raster;
+	}
+
+	public static BufferedImage crop(BufferedImage image) {
+		int minY = 0, maxY = 0, minX = Integer.MAX_VALUE, maxX = 0;
+		boolean isBlank, minYIsDefined = false;
+		Raster raster = image.getRaster();
+
+		for (int y = 0; y < image.getHeight(); y++) {
+			isBlank = true;
+
+			for (int x = 0; x < image.getWidth(); x++) {
+				//Change condition to (raster.getSample(x, y, 3) != 0)
+				//for better performance
+				if (raster.getPixel(x, y, (int[]) null)[3] != 0) {
+					isBlank = false;
+
+					if (x < minX) minX = x;
+					if (x > maxX) maxX = x;
+				}
+			}
+
+			if (!isBlank) {
+				if (!minYIsDefined) {
+					minY = y;
+					minYIsDefined = true;
+				} else {
+					if (y > maxY) maxY = y;
+				}
+			}
+		}
+
+		return image.getSubimage(minX, minY, maxX - minX + 1, maxY - minY + 1);
+	}
+
+	public void crop() {
+		int minX = 0;
+		int maxX = 0;
+		int minY = 0;
+		int maxY = 0;
+
+		boolean foundMinX = false;
+		for (int x = 0; x < myWidth; x++) {
+			if (foundMinX) {
+				break;
+			}
+			for (int y = 0; y < myHeight; y++) {
+				if (myPixels[y * myWidth + x] != 0) {
+					minX = x;
+					foundMinX = true;
+					break;
+				}
+			}
+		}
+		boolean foundMaxX = false;
+		for (int x = myWidth - 1; x >= 0; x--) {
+			if (foundMaxX) {
+				break;
+			}
+			for (int y = 0; y < myHeight; y++) {
+				if (myPixels[y * myWidth + x] != 0) {
+					maxX = x;
+					foundMaxX = true;
+					break;
+				}
+			}
+		}
+		boolean foundMinY = false;
+		for (int y = 0; y < myHeight; y++) {
+			if (foundMinY) {
+				break;
+			}
+			for (int x = 0; x < myWidth; x++) {
+				if (myPixels[y * myWidth + x] != 0) {
+					minY = y;
+					foundMinY = true;
+					break;
+				}
+			}
+		}
+		boolean foundMaxY = false;
+		for (int y = myHeight - 1; y >= 0; y--) {
+			if (foundMaxY) {
+				break;
+			}
+			for (int x = 0; x < myWidth; x++) {
+				if (myPixels[y * myWidth + x] != 0) {
+					maxY = y + 1;
+					foundMaxY = true;
+					break;
+				}
+			}
+		}
+
+		int width = (maxX - minX);
+		int height = (maxY - minY);
+		int[] newPixels = new int[(maxX - minX) * (maxY - minY)];
+		for (int x = minX; x < maxX; x++) {
+			for (int y = minY; y < maxY; y++) {
+				newPixels[(x - minX) + (y - minY) * width] = myPixels[x + y * myWidth];
+			}
+		}
+		myWidth = width;
+		myHeight = height;
+		myPixels = newPixels;
+	}
+
+	public void shadow(int color) {
+		if (this == EMPTY_SPRITE) {
+			return;
+		}
+		for (int y = myHeight - 1; y > 0; y--) {
+			int pos = y * myWidth;
+			for (int x = myWidth - 1; x > 0; x--) {
+				if (myPixels[x + pos] == 0 && myPixels[x + pos - 1 - myWidth] != 0) {
+					myPixels[x + pos] = color;
+				}
+			}
+		}
+	}
+
+
+	public Sprite(byte data[], Component component) {
+		try {
+			Image image =  Toolkit.getDefaultToolkit().createImage(data);
+			MediaTracker mediatracker = new MediaTracker(component);
+			mediatracker.addImage(image, 0);
+			mediatracker.waitForAll();
+			myWidth = image.getWidth(component);
+			myHeight = image.getHeight(component);
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			drawOffsetX = 0;
+			drawOffsetY = 0;
+			myPixels = new int[myWidth * myHeight];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
+			pixelgrabber.grabPixels();
+		} catch (Exception _ex) {
+			System.out.println("Error converting jpg");
+		}
+	}
+
+	public boolean isMousedOver(int spriteX, int spriteY, int mouseX, int mouseY) {
+		return mouseX >= spriteX && mouseY >= spriteY && mouseX <= spriteX + myWidth && mouseY <= spriteY + myHeight;
+	}
+
+
+	public Sprite(String img, int width, int height) {
+		try {
+			Image image =  Toolkit.getDefaultToolkit().createImage(FileUtils.readFile(img));
+			myWidth = width;
+			myHeight = height;
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			drawOffsetX = 0;
+			drawOffsetY = 0;
+			myPixels = new int[myWidth * myHeight];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
+			pixelgrabber.grabPixels();
+			image = null;
+		} catch (Exception _ex) {
+			System.out.println(_ex);
+		}
+	}
+
+	public Sprite(Sprite sprite, int width, int height) {
+		this.myWidth = width;
+		this.myHeight = height;
+		this.maxWidth = width;
+		this.maxHeight = height;
+		drawOffsetX = 0;
+		drawOffsetY = 0;
+
+		myPixels = new int[width * height];
+
+		System.arraycopy(sprite.myPixels, 0, myPixels, 0, myPixels.length);
+
+	}
+
+	private static Map<String, Integer> mappedSprites;
+
+	public static void loadManifest() {
+		// Creating a Gson object
+		Gson gson = new Gson();
+
+		// Define the type of the data
+		Type type = new TypeToken<Map<String, Integer>>() {}.getType();
+
+		try (Reader reader = new InputStreamReader(AssetUtils.INSTANCE.getResource("spriteMappings.json").openStream())) {
+			mappedSprites = gson.fromJson(reader, type);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static ArrayList<String> beingUsed = new ArrayList<String>();
+
+	public Sprite(String img) {
+		try {
+			String imgName = img.toLowerCase();
+			if (img.startsWith("/")) {
+				imgName = img.substring(1).toLowerCase();
+			}
+
+			if (mappedSprites.containsKey(imgName)) {
+				Image image =  ImageCache.get(mappedSprites.get(imgName)).toBufferedImage();
+				ImageIcon sprite = new ImageIcon(image);
+				myWidth = sprite.getIconWidth();
+				myHeight = sprite.getIconHeight();
+				maxWidth = myWidth;
+				maxHeight = myHeight;
+				drawOffsetX = 0;
+				drawOffsetY = 0;
+				myPixels = new int[myWidth * myHeight];
+				PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
+				pixelgrabber.grabPixels();
+				image = null;
+				setTransparency(255, 0, 255);
+			}
+		} catch (Exception _ex) {
+
+		}
+	}
+
+	public Sprite(Image image) {
+		ImageIcon imageicon = new ImageIcon(image);
+		imageicon.getIconHeight();
+		imageicon.getIconWidth();
+		try {
+			myWidth = imageicon.getIconWidth();
+			myHeight = imageicon.getIconHeight();
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			drawOffsetX = 0;
+			drawOffsetY = 0;
+			myPixels = new int[myWidth * myHeight];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth,
+					myHeight, myPixels, 0, myWidth);
+			pixelgrabber.grabPixels();
+		} catch (Exception _ex) {
+			System.out.println(_ex);
+		}
+	}
+
+	public void drawHoverSprite(int x, int y, Sprite hover) {
+		if (MouseHandler.mouseX >= x && MouseHandler.mouseX <= x + this.myWidth
+				&& MouseHandler.mouseY >= y && MouseHandler.mouseY <= y + this.myHeight) {
+			hover.drawAdvancedSprite(x, y);
+		} else {
+			this.drawAdvancedSprite(x, y);
+		}
+	}
+
+
+	public void drawHoverSprite(int x, int y, int offsetX, int offsetY, Sprite hover) {
+		this.drawSprite(x, y);
+		if (MouseHandler.mouseX >= offsetX + x && MouseHandler.mouseX <= offsetX + x + this.myWidth
+				&& MouseHandler.mouseY >= offsetY + y && MouseHandler.mouseY <= offsetY + y + this.myHeight) {
+			hover.drawSprite(x, y);
+		}
+	}
+
+	public void draw24BitSprite(int x, int y) {
+		int alpha = 256;
+		x += this.drawOffsetX;// offsetX
+		y += this.drawOffsetY;// offsetY
+		int destOffset = x + y * Rasterizer2D.width;
+		int srcOffset = 0;
+		int height = this.myHeight;
+		int width = this.myWidth;
+		int destStep = Rasterizer2D.width - width;
+		int srcStep = 0;
+		if (y < Rasterizer2D.yClipStart) {
+			int trimHeight = Rasterizer2D.yClipStart - y;
+			height -= trimHeight;
+			y = Rasterizer2D.yClipStart;
+			srcOffset += trimHeight * width;
+			destOffset += trimHeight * Rasterizer2D.width;
+		}
+		if (y + height > Rasterizer2D.yClipEnd) {
+			height -= (y + height) - Rasterizer2D.yClipEnd;
+		}
+		if (x < Rasterizer2D.xClipStart) {
+			int trimLeft = Rasterizer2D.xClipStart - x;
+			width -= trimLeft;
+			x = Rasterizer2D.xClipStart;
+			srcOffset += trimLeft;
+			destOffset += trimLeft;
+			srcStep += trimLeft;
+			destStep += trimLeft;
+		}
+		if (x + width > Rasterizer2D.xClipEnd) {
+			int trimRight = (x + width) - Rasterizer2D.xClipEnd;
+			width -= trimRight;
+			srcStep += trimRight;
+			destStep += trimRight;
+		}
+		if (!((width <= 0) || (height <= 0))) {
+			set24BitPixels(width, height, Rasterizer2D.pixels, myPixels, alpha, destOffset, srcOffset, destStep, srcStep);
+		}
+	}
+
+	public void drawTransparentSprite(int x, int y, int opacity) {
+		int k = opacity;// was parameter
+		x += drawOffsetX;
+		y += drawOffsetY;
+		int i1 = x + y * Rasterizer2D.width;
+		int j1 = 0;
+		int k1 = myHeight;
+		int l1 = myWidth;
+		int i2 = Rasterizer2D.width - l1;
+		int j2 = 0;
+		if (y < Rasterizer2D.yClipStart) {
+			int k2 = Rasterizer2D.yClipStart - y;
+			k1 -= k2;
+			y = Rasterizer2D.yClipStart;
+			j1 += k2 * l1;
+			i1 += k2 * Rasterizer2D.width;
+		}
+		if (y + k1 > Rasterizer2D.yClipEnd)
+			k1 -= (y + k1) - Rasterizer2D.yClipEnd;
+		if (x < Rasterizer2D.xClipStart) {
+			int l2 = Rasterizer2D.xClipStart - x;
+			l1 -= l2;
+			x = Rasterizer2D.xClipStart;
+			j1 += l2;
+			i1 += l2;
+			j2 += l2;
+			i2 += l2;
+		}
+		if (x + l1 > Rasterizer2D.xClipEnd) {
+			int i3 = (x + l1) - Rasterizer2D.xClipEnd;
+			l1 -= i3;
+			j2 += i3;
+			i2 += i3;
+		}
+		if (!(l1 <= 0 || k1 <= 0)) {
+			method351(j1, l1, Rasterizer2D.pixels, myPixels, j2, k1, i2, k, i1);
+		}
+	}
+
+	private void set24BitPixels(int width, int height, int destPixels[], int srcPixels[], int srcAlpha, int destOffset, int srcOffset, int destStep, int srcStep) {
+		int srcColor;
+		int destAlpha;
+		for (int loop = -height; loop < 0; loop++) {
+			for (int loop2 = -width; loop2 < 0; loop2++) {
+				srcAlpha = ((this.myPixels[srcOffset] >> 24) & 255);
+				destAlpha = 256 - srcAlpha;
+				srcColor = srcPixels[srcOffset++];
+				if (srcColor != 0 && srcColor != 0xffffff) {
+					int destColor = destPixels[destOffset];
+					destPixels[destOffset++] = ((srcColor & 0xff00ff) * srcAlpha + (destColor & 0xff00ff) * destAlpha & 0xff00ff00) + ((srcColor & 0xff00) * srcAlpha + (destColor & 0xff00) * destAlpha & 0xff0000) >> 8;
+				} else {
+					destOffset++;
+				}
+			}
+			destOffset += destStep;
+			srcOffset += srcStep;
+		}
+	}
+
+	public void setTransparency(int transRed, int transGreen, int transBlue) {
+		for (int index = 0; index < myPixels.length; index++)
+			if (((myPixels[index] >> 16) & 255) == transRed && ((myPixels[index] >> 8) & 255) == transGreen && (myPixels[index] & 255) == transBlue)
+				myPixels[index] = 0;
+	}
+
+	public Sprite(FileArchive archive, String name, int i) {
+		Buffer dataBuffer = new Buffer(archive.readFile(name + ".dat"));
+		Buffer indexBuffer = new Buffer(archive.readFile("index.dat"));
+
+		indexBuffer.currentPosition = dataBuffer.readUShort();
+
+		maxWidth = indexBuffer.readUShort();
+		maxHeight = indexBuffer.readUShort();
+		int pixelCount = indexBuffer.readUnsignedByte();
+		int raster[] = new int[pixelCount];
+
+		for (int pixel = 0; pixel < pixelCount - 1; pixel++) {
+			raster[pixel + 1] = indexBuffer.readTriByte();
+			if (raster[pixel + 1] == 0)
+				raster[pixel + 1] = 1;
+		}
+
+		for (int index = 0; index < i; index++) {
+			indexBuffer.currentPosition += 2;
+			dataBuffer.currentPosition += indexBuffer.readUShort() * indexBuffer.readUShort();
+			indexBuffer.currentPosition++;
+		}
+
+		drawOffsetX = indexBuffer.readUnsignedByte();
+		drawOffsetY = indexBuffer.readUnsignedByte();
+		myWidth = indexBuffer.readUShort();
+		myHeight = indexBuffer.readUShort();
+
+		int type = indexBuffer.readUnsignedByte();
+
+		int spriteSize = myWidth * myHeight;
+
+		myPixels = new int[spriteSize];
+		if (type == 0) {
+			for (int pixel = 0; pixel < spriteSize; pixel++) {
+				myPixels[pixel] = raster[dataBuffer.readUnsignedByte()];
+			}
+			setTransparency(255, 0, 255);
+			return;
+		}
+		if (type == 1) {
+			for (int x = 0; x < myWidth; x++) {
+				for (int y = 0; y < myHeight; y++) {
+					myPixels[x + y * myWidth] = raster[dataBuffer.readUnsignedByte()];
+				}
+			}
+
+		}
+		setTransparency(255, 0, 255);
+	}
+
+	public void init() {
+		Rasterizer2D.initDrawingArea(myHeight, myWidth, myPixels,null);
+	}
+
+	public void method344(int i, int j, int k) {
+		for (int i1 = 0; i1 < myPixels.length; i1++) {
+			int j1 = myPixels[i1];
+			if (j1 != 0) {
+				int k1 = j1 >> 16 & 0xff;
+				k1 += i;
+				if (k1 < 1)
+					k1 = 1;
+				else if (k1 > 255)
+					k1 = 255;
+				int l1 = j1 >> 8 & 0xff;
+				l1 += j;
+				if (l1 < 1)
+					l1 = 1;
+				else if (l1 > 255)
+					l1 = 255;
+				int i2 = j1 & 0xff;
+				i2 += k;
+				if (i2 < 1)
+					i2 = 1;
+				else if (i2 > 255)
+					i2 = 255;
+				myPixels[i1] = (k1 << 16) + (l1 << 8) + i2;
+			}
+		}
+
+	}
+
+	public void method345() {
+		int ai[] = new int[maxWidth * maxHeight];
+		for (int j = 0; j < myHeight; j++) {
+			System.arraycopy(myPixels, j * myWidth, ai, j + drawOffsetY * maxWidth + drawOffsetX, myWidth);
+		}
+
+		myPixels = ai;
+		myWidth = maxWidth;
+		myHeight = maxHeight;
+		drawOffsetX = 0;
+		drawOffsetY = 0;
+	}
+
+	public void method346(int x, int y) {
+		x += drawOffsetX;
+		y += drawOffsetY;
+		int l = x + y * Rasterizer2D.width;
+		int i1 = 0;
+		int height = myHeight;
+		int width = myWidth;
+		int l1 = Rasterizer2D.width - width;
+		int i2 = 0;
+		if (y < Rasterizer2D.yClipStart) {
+			int j2 = Rasterizer2D.yClipStart - y;
+			height -= j2;
+			y = Rasterizer2D.yClipStart;
+			i1 += j2 * width;
+			l += j2 * Rasterizer2D.width;
+		}
+		if (y + height > Rasterizer2D.yClipEnd)
+			height -= (y + height) - Rasterizer2D.yClipEnd;
+		if (x < Rasterizer2D.xClipStart) {
+			int k2 = Rasterizer2D.xClipStart - x;
+			width -= k2;
+			x = Rasterizer2D.xClipStart;
+			i1 += k2;
+			l += k2;
+			i2 += k2;
+			l1 += k2;
+		}
+		if (x + width > Rasterizer2D.xClipEnd) {
+			int l2 = (x + width) - Rasterizer2D.xClipEnd;
+			width -= l2;
+			i2 += l2;
+			l1 += l2;
+		}
+		if (width <= 0 || height <= 0) {
+		} else {
+			method347(l, width, height, i2, i1, l1, myPixels, Rasterizer2D.pixels);
+		}
+	}
+
+	private void method347(int i, int j, int k, int l, int i1, int k1, int ai[], int ai1[]) {
+		int l1 = -(j >> 2);
+		j = -(j & 3);
+		for (int i2 = -k; i2 < 0; i2++) {
+			for (int j2 = l1; j2 < 0; j2++) {
+				int val = ai[i1++];
+				drawAlpha(ai1, i++, val, 255);
+				val = ai[i1++];
+				drawAlpha(ai1, i++, val, 255);
+				val = ai[i1++];
+				drawAlpha(ai1, i++, val, 255);
+				val = ai[i1++];
+				drawAlpha(ai1, i++, val, 255);
+			}
+
+			for (int k2 = j; k2 < 0; k2++) {
+				int val = ai[i1++];
+				drawAlpha(ai1, i++, val, 255);
+			}
+
+			i += k1;
+			i1 += l;
+		}
+	}
+
+	public void drawSprite1(int i, int j) {
+		drawSprite1(i, j, 128);
+	}
+
+	public void drawSprite1(int i, int j, int k, boolean overrideCanvas) {
+		i += drawOffsetX;
+		j += drawOffsetY;
+		int i1 = i + j * Rasterizer2D.width;
+		int j1 = 0;
+		int k1 = myHeight;
+		int l1 = myWidth;
+		int i2 = Rasterizer2D.width - l1;
+		int j2 = 0;
+		if (!(overrideCanvas && j > 0) && j < Rasterizer2D.yClipStart) {
+			int k2 = Rasterizer2D.yClipStart - j;
+			k1 -= k2;
+			j = Rasterizer2D.yClipStart;
+			j1 += k2 * l1;
+			i1 += k2 * Rasterizer2D.width;
+		}
+		if (j + k1 > Rasterizer2D.yClipEnd)
+			k1 -= (j + k1) - Rasterizer2D.yClipEnd;
+		if (!overrideCanvas && i < Rasterizer2D.xClipStart) {
+			int l2 = Rasterizer2D.xClipStart - i;
+			l1 -= l2;
+			i = Rasterizer2D.xClipStart;
+			j1 += l2;
+			i1 += l2;
+			j2 += l2;
+			i2 += l2;
+		}
+		if (i + l1 > Rasterizer2D.xClipEnd) {
+			int i3 = (i + l1) - Rasterizer2D.xClipEnd;
+			l1 -= i3;
+			j2 += i3;
+			i2 += i3;
+		}
+		if (!(l1 <= 0 || k1 <= 0)) {
+			method351(j1, l1, Rasterizer2D.pixels, myPixels, j2, k1, i2, k, i1);
+		}
+	}
+
+	public void drawSprite1(int i, int j, int k) {
+		i += drawOffsetX;
+		j += drawOffsetY;
+		int i1 = i + j * Rasterizer2D.width;
+		int j1 = 0;
+		int k1 = myHeight;
+		int l1 = myWidth;
+		int i2 = Rasterizer2D.width - l1;
+		int j2 = 0;
+		if (j < Rasterizer2D.yClipStart) {
+			int k2 = Rasterizer2D.yClipStart - j;
+			k1 -= k2;
+			j = Rasterizer2D.yClipStart;
+			j1 += k2 * l1;
+			i1 += k2 * Rasterizer2D.width;
+		}
+		if (j + k1 > Rasterizer2D.yClipEnd)
+			k1 -= (j + k1) - Rasterizer2D.yClipEnd;
+		if (i < Rasterizer2D.xClipStart) {
+			int l2 = Rasterizer2D.xClipStart - i;
+			l1 -= l2;
+			i = Rasterizer2D.xClipStart;
+			j1 += l2;
+			i1 += l2;
+			j2 += l2;
+			i2 += l2;
+		}
+		if (i + l1 > Rasterizer2D.xClipEnd) {
+			int i3 = (i + l1) - Rasterizer2D.xClipEnd;
+			l1 -= i3;
+			j2 += i3;
+			i2 += i3;
+		}
+		if (!(l1 <= 0 || k1 <= 0)) {
+			method351(j1, l1, Rasterizer2D.pixels, myPixels, j2, k1, i2, k, i1);
+		}
+	}
+
+	public void drawCenteredSprite(int x, int y) {
+		drawSprite(x - myWidth / 2, y - myHeight / 2);
+	}
+
+	public void drawAdvancedSpriteCentered(int i, int j) {
+		drawAdvancedSprite(i - (myWidth / 2), j - (myHeight / 2));
+	}
+
+	public void drawSprite(int x, int y)
+	{
+		x += drawOffsetX;
+		y += drawOffsetY;
+		int rasterClip = x + y * Rasterizer2D.width;
+		int imageClip = 0;
+		int height = myHeight;
+		int width = myWidth;
+		int rasterOffset = Rasterizer2D.width - width;
+		int imageOffset = 0;
+		if(y < Rasterizer2D.yClipStart)
+		{
+			int dy = Rasterizer2D.yClipStart - y;
+			height -= dy;
+			y = Rasterizer2D.yClipStart;
+			imageClip += dy * width;
+			rasterClip += dy * Rasterizer2D.width;
+		}
+		if(y + height > Rasterizer2D.yClipEnd)
+			height -= (y + height) - Rasterizer2D.yClipEnd;
+		if(x < Rasterizer2D.xClipStart)
+		{
+			int dx = Rasterizer2D.xClipStart - x;
+			width -= dx;
+			x = Rasterizer2D.xClipStart;
+			imageClip += dx;
+			rasterClip += dx;
+			imageOffset += dx;
+			rasterOffset += dx;
+		}
+		if(x + width > Rasterizer2D.xClipEnd)
+		{
+			int dx = (x + width) - Rasterizer2D.xClipEnd;
+			width -= dx;
+			imageOffset += dx;
+			rasterOffset += dx;
+		}
+		if(!(width <= 0 || height <= 0))
+		{
+			method349(Rasterizer2D.pixels, myPixels, imageClip, rasterClip, width, height, rasterOffset, imageOffset);
+		}
+	}
+
+	public void drawSprite(int i, int k, int color) {
+		int tempWidth = myWidth + 2;
+		int tempHeight = myHeight + 2;
+		int[] tempArray = new int[tempWidth * tempHeight];
+		for (int x = 0; x < myWidth; x++) {
+			for (int y = 0; y < myHeight; y++) {
+				if (myPixels[x + y * myWidth] != 0)
+					tempArray[(x + 1) + (y + 1) * tempWidth] = myPixels[x + y * myWidth];
+			}
+		}
+		for (int x = 0; x < tempWidth; x++) {
+			for (int y = 0; y < tempHeight; y++) {
+				if (tempArray[(x) + (y) * tempWidth] == 0) {
+					if (x < tempWidth - 1 && tempArray[(x + 1) + ((y) * tempWidth)] > 0 && tempArray[(x + 1) + ((y) * tempWidth)] != 0xffffff) {
+						drawAlpha(tempArray, (x) + (y) * tempWidth, color, 255);
+					}
+					if (x > 0 && tempArray[(x - 1) + ((y) * tempWidth)] > 0 && tempArray[(x - 1) + ((y) * tempWidth)] != 0xffffff) {
+						drawAlpha(tempArray, (x) + (y) * tempWidth, color, 255);
+					}
+					if (y < tempHeight - 1 && tempArray[(x) + ((y + 1) * tempWidth)] > 0 && tempArray[(x) + ((y + 1) * tempWidth)] != 0xffffff) {
+						drawAlpha(tempArray, (x) + (y) * tempWidth, color, 255);
+					}
+					if (y > 0 && tempArray[(x) + ((y - 1) * tempWidth)] > 0 && tempArray[(x) + ((y - 1) * tempWidth)] != 0xffffff) {
+						drawAlpha(tempArray, (x) + (y) * tempWidth, color, 255);
+					}
+				}
+			}
+		}
+		i--;
+		k--;
+		i += drawOffsetX;
+		k += drawOffsetY;
+		int l = i + k * Rasterizer2D.width;
+		int i1 = 0;
+		int j1 = tempHeight;
+		int k1 = tempWidth;
+		int l1 = Rasterizer2D.width - k1;
+		int i2 = 0;
+		if (k < Rasterizer2D.yClipStart) {
+			int j2 = Rasterizer2D.yClipStart - k;
+			j1 -= j2;
+			k = Rasterizer2D.yClipStart;
+			i1 += j2 * k1;
+			l += j2 * Rasterizer2D.width;
+		}
+		if (k + j1 > Rasterizer2D.yClipEnd) {
+			j1 -= (k + j1) - Rasterizer2D.yClipEnd;
+		}
+		if (i < Rasterizer2D.xClipStart) {
+			int k2 = Rasterizer2D.xClipStart - i;
+			k1 -= k2;
+			i = Rasterizer2D.xClipStart;
+			i1 += k2;
+			l += k2;
+			i2 += k2;
+			l1 += k2;
+		}
+		if (i + k1 > Rasterizer2D.xClipEnd) {
+			int l2 = (i + k1) - Rasterizer2D.xClipEnd;
+			k1 -= l2;
+			i2 += l2;
+			l1 += l2;
+		}
+		if (!(k1 <= 0 || j1 <= 0)) {
+			method349(Rasterizer2D.pixels, tempArray, i1, l, k1, j1, l1, i2);
+		}
+	}
+
+	public void drawSprite2(int i, int j) {
+		int k = 225;// was parameter
+		i += drawOffsetX;
+		j += drawOffsetY;
+		int i1 = i + j * Rasterizer2D.width;
+		int j1 = 0;
+		int k1 = myHeight;
+		int l1 = myWidth;
+		int i2 = Rasterizer2D.width - l1;
+		int j2 = 0;
+		if (j < Rasterizer2D.yClipStart) {
+			int k2 = Rasterizer2D.yClipStart - j;
+			k1 -= k2;
+			j = Rasterizer2D.yClipStart;
+			j1 += k2 * l1;
+			i1 += k2 * Rasterizer2D.width;
+		}
+		if (j + k1 > Rasterizer2D.yClipEnd)
+			k1 -= (j + k1) - Rasterizer2D.yClipEnd;
+		if (i < Rasterizer2D.xClipStart) {
+			int l2 = Rasterizer2D.xClipStart - i;
+			l1 -= l2;
+			i = Rasterizer2D.xClipStart;
+			j1 += l2;
+			i1 += l2;
+			j2 += l2;
+			i2 += l2;
+		}
+		if (i + l1 > Rasterizer2D.xClipEnd) {
+			int i3 = (i + l1) - Rasterizer2D.xClipEnd;
+			l1 -= i3;
+			j2 += i3;
+			i2 += i3;
+		}
+		if (!(l1 <= 0 || k1 <= 0)) {
+			method351(j1, l1, Rasterizer2D.pixels, myPixels, j2, k1, i2, k, i1);
+		}
+	}
+
+	private void method349(int ai[], int ai1[], int j, int k, int l, int i1, int j1, int k1) {
+		int i;// was parameter
+		int l1 = -(l >> 2);
+		l = -(l & 3);
+		for (int i2 = -i1; i2 < 0; i2++) {
+			for (int j2 = l1; j2 < 0; j2++) {
+				i = ai1[j++];
+				if (i != 0 && i != -1) {
+					drawAlpha(ai, k++, i, 255);
+				} else {
+					k++;
+				}
+				i = ai1[j++];
+				if (i != 0 && i != -1) {
+					drawAlpha(ai, k++, i, 255);
+				} else {
+					k++;
+				}
+				i = ai1[j++];
+				if (i != 0 && i != -1) {
+					drawAlpha(ai, k++, i, 255);
+				} else {
+					k++;
+				}
+				i = ai1[j++];
+				if (i != 0 && i != -1) {
+					drawAlpha(ai, k++, i, 255);
+				} else {
+					k++;
+				}
+			}
+
+			for (int k2 = l; k2 < 0; k2++) {
+				i = ai1[j++];
+				if (i != 0 && i != -1) {
+					drawAlpha(ai, k++, i, 255);
+				} else {
+					k++;
+				}
+			}
+			k += j1;
+			j += k1;
+		}
+	}
+
+	private void method351(int i, int j, int ai[], int ai1[], int l, int i1, int j1, int k1, int l1) {
+		int k;// was parameter
+		int j2 = 256 - k1;
+		for (int k2 = -i1; k2 < 0; k2++) {
+			for (int l2 = -j; l2 < 0; l2++) {
+				k = ai1[i++];
+				if (k != 0) {
+					int i3 = ai[l1];
+					drawAlpha(ai, l1++, ((k & 0xff00ff) * k1 + (i3 & 0xff00ff) * j2 & 0xff00ff00) + ((k & 0xff00) * k1 + (i3 & 0xff00) * j2 & 0xff0000) >> 8, k1);
+				} else {
+					l1++;
+				}
+			}
+
+			l1 += j1;
+			i += l;
+		}
+	}
+
+
+	public void rotate(int i, int j, int ai[], int k, int ai1[], int i1, int j1, int k1, int l1, int i2) {
+		try {
+			int j2 = -l1 / 2;
+			int k2 = -i / 2;
+			int l2 = (int) (Math.sin((double) j / 326.11000000000001D) * 65536D);
+			int i3 = (int) (Math.cos((double) j / 326.11000000000001D) * 65536D);
+			l2 = l2 * k >> 8;
+			i3 = i3 * k >> 8;
+			int j3 = (i2 << 16) + (k2 * l2 + j2 * i3);
+			int k3 = (i1 << 16) + (k2 * i3 - j2 * l2);
+			int l3 = k1 + j1 * Rasterizer2D.width;
+			for (j1 = 0; j1 < i; j1++) {
+				int i4 = ai1[j1];
+				int j4 = l3 + i4;
+				int k4 = j3 + i3 * i4;
+				int l4 = k3 - l2 * i4;
+				for (k1 = -ai[j1]; k1 < 0; k1++) {
+					int x1 = k4 >> 16;
+					int y1 = l4 >> 16;
+					int x2 = x1 + 1;
+					int y2 = y1 + 1;
+					int c1 = myPixels[x1 + y1 * myWidth];
+					int c2 = myPixels[x2 + y1 * myWidth];
+					int c3 = myPixels[x1 + y2 * myWidth];
+					int c4 = myPixels[x2 + y2 * myWidth];
+					int u1 = (k4 >> 8) - (x1 << 8);
+					int v1 = (l4 >> 8) - (y1 << 8);
+					int u2 = (x2 << 8) - (k4 >> 8);
+					int v2 = (y2 << 8) - (l4 >> 8);
+					int a1 = u2 * v2;
+					int a2 = u1 * v2;
+					int a3 = u2 * v1;
+					int a4 = u1 * v1;
+					int r = (c1 >> 16 & 0xff) * a1 + (c2 >> 16 & 0xff) * a2 + (c3 >> 16 & 0xff) * a3 + (c4 >> 16 & 0xff) * a4 & 0xff0000;
+					int g = (c1 >> 8 & 0xff) * a1 + (c2 >> 8 & 0xff) * a2 + (c3 >> 8 & 0xff) * a3 + (c4 >> 8 & 0xff) * a4 >> 8 & 0xff00;
+					int b = (c1 & 0xff) * a1 + (c2 & 0xff) * a2 + (c3 & 0xff) * a3 + (c4 & 0xff) * a4 >> 16;
+					drawAlpha(Rasterizer2D.pixels, j4++, r | g | b, 255);
+					k4 += i3;
+					l4 -= l2;
+				}
+
+				j3 += l2;
+				k3 += i3;
+				l3 += Rasterizer2D.width;
+			}
+
+		} catch (Exception _ex) {
+		}
+	}
+
+	public void method353(int i, double d, int l1) {
+		// all of the following were parameters
+		int j = 15;
+		int k = 20;
+		int l = 15;
+		int j1 = 256;
+		int k1 = 20;
+		// all of the previous were parameters
+		try {
+			int i2 = -k / 2;
+			int j2 = -k1 / 2;
+			int k2 = (int) (Math.sin(d) * 65536D);
+			int l2 = (int) (Math.cos(d) * 65536D);
+			k2 = k2 * j1 >> 8;
+			l2 = l2 * j1 >> 8;
+			int i3 = (l << 16) + (j2 * k2 + i2 * l2);
+			int j3 = (j << 16) + (j2 * l2 - i2 * k2);
+			int k3 = l1 + i * Rasterizer2D.width;
+			for (i = 0; i < k1; i++) {
+				int l3 = k3;
+				int i4 = i3;
+				int j4 = j3;
+				for (l1 = -k; l1 < 0; l1++) {
+					int k4 = myPixels[(i4 >> 16) + (j4 >> 16) * myWidth];
+					if (k4 != 0)
+						drawAlpha(Rasterizer2D.pixels, l3++, k4, 255);
+					else
+						l3++;
+					i4 += l2;
+					j4 -= k2;
+				}
+
+				i3 += k2;
+				j3 += l2;
+				k3 += Rasterizer2D.width;
+			}
+
+		} catch (Exception _ex) {
+		}
+	}
+
+	public Sprite(byte spriteData[]) {
+		try {
+			Image image =  Toolkit.getDefaultToolkit().createImage(spriteData);
+			ImageIcon sprite = new ImageIcon(image);
+			myWidth = sprite.getIconWidth();
+			myHeight = sprite.getIconHeight();
+			maxWidth = myWidth;
+			maxHeight = myHeight;
+			drawOffsetX = 0;
+			drawOffsetY = 0;
+			myPixels = new int[myWidth * myHeight];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, myWidth, myHeight, myPixels, 0, myWidth);
+			pixelgrabber.grabPixels();
+			image = null;
+			setTransparency(255, 0, 255);
+		} catch (Exception _ex) {
+			System.out.println(_ex);
+		}
+	}
+
+	public static Image create(byte spriteData[]) {
+		return Toolkit.getDefaultToolkit().createImage(spriteData);
+	}
+
+	public void method354(IndexedImage background, int i, int j) {
+		j += drawOffsetX;
+		i += drawOffsetY;
+		int k = j + i * Rasterizer2D.width;
+		int l = 0;
+		int i1 = myHeight;
+		int j1 = myWidth;
+		int k1 = Rasterizer2D.width - j1;
+		int l1 = 0;
+		if (i < Rasterizer2D.yClipStart) {
+			int i2 = Rasterizer2D.yClipStart - i;
+			i1 -= i2;
+			i = Rasterizer2D.yClipStart;
+			l += i2 * j1;
+			k += i2 * Rasterizer2D.width;
+		}
+		if (i + i1 > Rasterizer2D.yClipEnd)
+			i1 -= (i + i1) - Rasterizer2D.yClipEnd;
+		if (j < Rasterizer2D.xClipStart) {
+			int j2 = Rasterizer2D.xClipStart - j;
+			j1 -= j2;
+			j = Rasterizer2D.xClipStart;
+			l += j2;
+			k += j2;
+			l1 += j2;
+			k1 += j2;
+		}
+		if (j + j1 > Rasterizer2D.xClipEnd) {
+			int k2 = (j + j1) - Rasterizer2D.xClipEnd;
+			j1 -= k2;
+			l1 += k2;
+			k1 += k2;
+		}
+		if (!(j1 <= 0 || i1 <= 0)) {
+			method355(myPixels, j1, background.palettePixels, i1, Rasterizer2D.pixels, 0, k1, k, l1, l);
+		}
+	}
+
+	public void drawAdvancedSprite(int xPos, int yPos) {
+		drawAdvancedSprite(xPos, yPos, 256);
+	}
+
+	public void drawAdvancedSprite(int xPos, int yPos, int alpha) {
+		int alphaValue = alpha;
+		xPos += drawOffsetX;
+		yPos += drawOffsetY;
+		int i1 = xPos + yPos * Rasterizer2D.width;
+		int j1 = 0;
+		int spriteHeight = myHeight;
+		int spriteWidth = myWidth;
+		int i2 = Rasterizer2D.width - spriteWidth;
+		int j2 = 0;
+		if (yPos < Rasterizer2D.yClipStart) {
+			int k2 = Rasterizer2D.yClipStart - yPos;
+			spriteHeight -= k2;
+			yPos = Rasterizer2D.yClipStart;
+			j1 += k2 * spriteWidth;
+			i1 += k2 * Rasterizer2D.width;
+		}
+		if (yPos + spriteHeight > Rasterizer2D.yClipEnd)
+			spriteHeight -= (yPos + spriteHeight) - Rasterizer2D.yClipEnd;
+		if (xPos < Rasterizer2D.xClipStart) {
+			int l2 = Rasterizer2D.xClipStart - xPos;
+			spriteWidth -= l2;
+			xPos = Rasterizer2D.xClipStart;
+			j1 += l2;
+			i1 += l2;
+			j2 += l2;
+			i2 += l2;
+		}
+		if (xPos + spriteWidth > Rasterizer2D.xClipEnd) {
+			int i3 = (xPos + spriteWidth) - Rasterizer2D.xClipEnd;
+			spriteWidth -= i3;
+			j2 += i3;
+			i2 += i3;
+		}
+		if (!(spriteWidth <= 0 || spriteHeight <= 0)) {
+			renderARGBPixels(spriteWidth, spriteHeight, myPixels, Rasterizer2D.pixels, i1, alphaValue, j1, j2, i2);
+		}
+	}
+
+	private void renderARGBPixels(int spriteWidth, int spriteHeight, int spritePixels[], int renderAreaPixels[], int pixel, int alphaValue, int i, int l, int j1) {
+		int pixelColor;
+		int alphaLevel;
+		int alpha = alphaValue;
+		for (int height = -spriteHeight; height < 0; height++) {
+			for (int width = -spriteWidth; width < 0; width++) {
+				alphaValue = ((myPixels[i] >> 24) & (alpha - 1));
+				alphaLevel = 256 - alphaValue;
+				if (alphaLevel > 256) {
+					alphaValue = 0;
+				}
+				if (alpha == 0) {
+					alphaLevel = 256;
+					alphaValue = 0;
+				}
+				pixelColor = spritePixels[i++];
+				if (pixelColor != 0) {
+					int pixelValue = renderAreaPixels[pixel];
+					drawAlpha(renderAreaPixels, pixel++, ((pixelColor & 0xff00ff) * alphaValue
+							+ (pixelValue & 0xff00ff) * alphaLevel & 0xff00ff00)
+							+ ((pixelColor & 0xff00) * alphaValue + (pixelValue & 0xff00) * alphaLevel
+							& 0xff0000) >> 8, alphaValue);
+				} else {
+					pixel++;
+				}
+			}
+			pixel += j1;
+			i += l;
+		}
+	}
+
+	private void method355(int ai[], int i, byte abyte0[], int j, int ai1[], int k, int l, int i1, int j1, int k1) {
+		int l1 = -(i >> 2);
+		i = -(i & 3);
+		for (int j2 = -j; j2 < 0; j2++) {
+			for (int k2 = l1; k2 < 0; k2++) {
+				k = ai[k1++];
+				if (k != 0 && abyte0[i1] == 0)
+					drawAlpha(ai1, i1++, k, 255);
+				else
+					i1++;
+				k = ai[k1++];
+				if (k != 0 && abyte0[i1] == 0)
+					drawAlpha(ai1, i1++, k, 255);
+				else
+					i1++;
+				k = ai[k1++];
+				if (k != 0 && abyte0[i1] == 0)
+					drawAlpha(ai1, i1++, k, 255);
+				else
+					i1++;
+				k = ai[k1++];
+				if (k != 0 && abyte0[i1] == 0)
+					drawAlpha(ai1, i1++, k, 255);
+				else
+					i1++;
+			}
+
+			for (int l2 = i; l2 < 0; l2++) {
+				k = ai[k1++];
+				if (k != 0 && abyte0[i1] == 0)
+					drawAlpha(ai1, i1++, k, 255);
+				else
+					i1++;
+			}
+
+			i1 += l;
+			k1 += j1;
+		}
+
+	}
+
+	public void cutR(int neww) {
+
+		for(int k = 0; k < myHeight; k++) {
+			if(myWidth*(k+1) < myPixels.length)
+				for(int dd = 0; dd < neww; dd++) {
+					if((myWidth*(k+1))-dd >= 0)
+						myPixels[(myWidth*(k+1))-dd] = 0;
+				}
+			else
+				for(int dd = 1; dd < neww; dd++) {
+					if((myWidth*(k+1))-dd >= 0)
+						myPixels[(myWidth*(k+1))-dd] = 0;
+				}
+
+		}
+
+
+	}
+	public void cutL(int neww) {
+
+		for(int k = 0; k < myHeight; k++) {
+			if((k*(myHeight*myWidth))+neww < myPixels.length)
+				for(int dd = 0; dd < neww; dd++) {
+					if((k*myWidth)+dd >= 0)
+						myPixels[(k*myWidth)+dd] = 0;
+				}
+
+			else
+				for(int dd = 0; dd < neww-1; dd++)  {
+					if((k*myWidth)+dd >= 0)
+						myPixels[(k*myWidth)+dd] = 0;
+				}
+
+		}
+	}
+
+	public int myPixels[];
+	public int myWidth;
+	public int myHeight;
+	public int drawOffsetX;
+	public int drawOffsetY;
+	public int maxWidth;
+	public int maxHeight;
+
+	@Override
+	public void drawAt(int x, int y) {
+		drawSprite(x, y);
+	}
+
+	@Override
+	public int getWidth() {
+		return myWidth;
+	}
+
+	@Override
+	public int getHeight() {
+		return myHeight;
+	}
+
+	@Override
+	public int getMaxWidth() {
+		return maxWidth;
+	}
+
+	@Override
+	public int getMaxHeight() {
+		return maxHeight;
+	}
+
+	@Override
+	public int getOffsetX() {
+		return drawOffsetX;
+	}
+
+	@Override
+	public int getOffsetY() {
+		return drawOffsetY;
+	}
+
+	@Override
+	public void setMaxWidth(int maxWidth) {
+		this.maxWidth = maxWidth;
+	}
+
+	@Override
+	public void setMaxHeight(int maxHeight) {
+		this.maxHeight = maxHeight;
+	}
+
+	@Override
+	public void setOffsetX(int offsetX) {
+		drawOffsetX = offsetX;
+	}
+
+	@Override
+	public void setOffsetY(int offsetY) {
+		drawOffsetY = offsetY;
+	}
+
+	@Override
+	public int[] getPixels() {
+		return myPixels;
+	}
+
+	@Override
+	public void setRaster() {
+		init();
+	}
+
+	@Override
+	public BufferedImage toBufferedImage() {
+		BufferedImage image = new BufferedImage(this.myWidth, this.myHeight, 2);
+		toBufferedImage(image);
+		return image;
+	}
+
+	@Override
+	public void toBufferedImage(BufferedImage img) throws IllegalArgumentException {
+		int width = getWidth();
+		int height = getHeight();
+		int[] pixels = getPixels();
+		int[] palette = new int[pixels.length];
+		for (int pixel = 0; pixel < pixels.length; pixel++) {
+			if (pixels[pixel] != 0) {
+				palette[pixel] = pixels[pixel] | 0xFF000000;
+			}
+		}
+		img.setRGB(0, 0, width, height, palette, 0, width);
+	}
+
+	@Override
+	public BufferedImage toBufferedOutline(Color color)
+	{
+		BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+		toBufferedOutline(img, color.getRGB());
+		return img;
+	}
+
+
+	@Override
+	public void toBufferedOutline(BufferedImage img, int color)
+	{
+		int width = getWidth();
+		int height = getHeight();
+
+		if (img.getWidth() != width || img.getHeight() != height)
+		{
+			throw new IllegalArgumentException("Image bounds do not match Sprite");
+		}
+
+		int[] pixels = getPixels();
+		int[] newPixels = new int[width * height];
+		int pixelIndex = 0;
+
+		for (int y = 0; y < height; ++y)
+		{
+			for (int x = 0; x < width; ++x)
+			{
+				int pixel = pixels[pixelIndex];
+				if (pixel == 16777215 || pixel == 0)
+				{
+					// W
+					if (x > 0 && pixels[pixelIndex - 1] != 0)
+					{
+						pixel = color;
+					}
+					// N
+					else if (y > 0 && pixels[pixelIndex - width] != 0)
+					{
+						pixel = color;
+					}
+					// E
+					else if (x < width - 1 && pixels[pixelIndex + 1] != 0)
+					{
+						pixel = color;
+					}
+					// S
+					else if (y < height - 1 && pixels[pixelIndex + width] != 0)
+					{
+						pixel = color;
+					}
+					newPixels[pixelIndex] = pixel;
+				}
+
+				pixelIndex++;
+			}
+		}
+
+		img.setRGB(0, 0, width, height, newPixels, 0, width);
+	}
+
+	public static EvictingDualNodeHashTable cachedSprites = new EvictingDualNodeHashTable(256);
+
+	public static Sprite getSprite(int id, int index) {
+		Sprite spritePixels = (Sprite) Client.spriteOverrides.get(id);
+
+		if (spritePixels != null)
+		{
+			return spritePixels;
+		}
+
+		Sprite spritePixels1 = (Sprite) Client.widgetSpriteOverrides.get(id);
+
+		if (spritePixels1 != null)
+		{
+			return spritePixels1;
+		}
+
+		Sprite sprite = (Sprite) cachedSprites.get(id);
+		if (sprite != null) {
+			return sprite;
+		}
+
+		byte[] spriteData = Js5List.sprites.takeFile(id, index);
+		boolean decoded;
+		if (spriteData == null) {
+			decoded = false;
+		} else {
+			SpriteData.decode(spriteData);
+			decoded = true;
+		}
+		if (!decoded) {
+			return Sprite.EMPTY_SPRITE;
+		} else {
+			Sprite image = generateImage();
+			cachedSprites.put(image, id);
+			return image;
+		}
+	}
+
+	public static Sprite[] getSprites(int var1, int index) {
+		byte[] spriteData = Js5List.sprites.takeFile(var1, index);
+		boolean decoded;
+		if (spriteData == null) {
+			decoded = false;
+		} else {
+			SpriteData.decode(spriteData);
+			decoded = true;
+		}
+
+		return !decoded ? null : generateImages();
+	}
+
+	static Sprite generateImage() {
+		Sprite sprite = new Sprite();
+		sprite.maxWidth = SpriteData.spriteWidth;
+		sprite.maxHeight = SpriteData.spriteHeight;
+		sprite.drawOffsetX = SpriteData.xOffsets[0];
+		sprite.drawOffsetY = SpriteData.yOffsets[0];
+		sprite.myWidth = SpriteData.spriteWidths[0];
+		sprite.myHeight = SpriteData.spriteHeights[0];
+		int totalPixels = sprite.myWidth * sprite.myHeight;
+		byte[] pixels = SpriteData.pixels[0];
+		sprite.myPixels = new int[totalPixels];
+
+		for(int currentPixel = 0; currentPixel < totalPixels; ++currentPixel) {
+			sprite.myPixels[currentPixel] = SpriteData.spritePalette[pixels[currentPixel] & 255];
+		}
+
+		SpriteData.xOffsets = null;
+		SpriteData.yOffsets = null;
+		SpriteData.spriteWidths = null;
+		SpriteData.spriteHeights = null;
+		SpriteData.spritePalette = null;
+		SpriteData.pixels = null;
+		return sprite;
+	}
+
+	static Sprite[] generateImages() {
+		Sprite[] sprites = new Sprite[SpriteData.spriteCount];
+
+		for(int currentImage = 0; currentImage < SpriteData.spriteCount; ++currentImage) {
+			Sprite var2 = sprites[currentImage] = new Sprite();
+			var2.maxWidth = SpriteData.spriteWidth;
+			var2.maxHeight = SpriteData.spriteHeight;
+			var2.drawOffsetX = SpriteData.xOffsets[currentImage];
+			var2.drawOffsetY = SpriteData.yOffsets[currentImage];
+			var2.myWidth = SpriteData.spriteWidths[currentImage];
+			var2.myHeight = SpriteData.spriteHeights[currentImage];
+			int totalPixels = var2.myWidth * var2.myHeight;
+			byte[] pixels = SpriteData.pixels[currentImage];
+			var2.myPixels = new int[totalPixels];
+
+			for(int currentPixel = 0; currentPixel < totalPixels; ++currentPixel) {
+				var2.myPixels[currentPixel] = SpriteData.spritePalette[pixels[currentPixel] & 255];
+			}
+		}
+
+		SpriteData.xOffsets = null;
+		SpriteData.yOffsets = null;
+		SpriteData.spriteWidths = null;
+		SpriteData.spriteHeights = null;
+		SpriteData.spritePalette = null;
+		SpriteData.pixels = null;
+		return sprites;
+	}
+
+}

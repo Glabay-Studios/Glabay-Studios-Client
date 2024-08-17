@@ -1,0 +1,1231 @@
+[ {
+  "title" : "Outlast Noob",
+  "description" : "Enter 1 Outlast\\nTournaments",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  } ],
+  "extraRewards" : "Coins x 500K",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "I Voted",
+  "description" : "Vote 1 Time",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  } ],
+  "extraRewards" : "Coins x 1M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Collector",
+  "description" : "Add 1 item to your\\nCollection Log",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 21046,
+    "amount" : 2
+  }, {
+    "id" : 995,
+    "amount" : 300000
+  } ],
+  "extraRewards" : "@cya@Chest rate bonus..\\nCoins x 300K",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Hello Hespori",
+  "description" : "Finish 1 Hespori\\nEvent",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 21046,
+    "amount" : 2
+  } ],
+  "extraRewards" : "@cya@Chest rate bonus..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "The Giver",
+  "description" : "Donate 2,000,000 to\\nWell of Good Will",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 21046,
+    "amount" : 2
+  } ],
+  "extraRewards" : "@cya@Chest rate bonus..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Save a Preset",
+  "description" : "Save 1 Preset",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 2841,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Bonus Xp Scroll x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "The Slayer",
+  "description" : "Complete 1 Slayer Tasks",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 7460,
+    "amount" : 1
+  }, {
+    "id" : 405,
+    "amount" : 1
+  }, {
+    "id" : 7629,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Gloves x 1\\nCasket x 1\\n2x Slayer Points Scro..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Dailyscape",
+  "description" : "Collect 1 Daily Reward",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 23933,
+    "amount" : 3
+  }, {
+    "id" : 21046,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Vote Crystal x 3\\n@cya@Chest rate bonus..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Burn It",
+  "description" : "Burn 5,000 Exchange\\nPoints at FoE",
+  "claimed" : false,
+  "taskDifficulty" : "STARTER",
+  "rewards" : [ {
+    "id" : 21046,
+    "amount" : 5
+  } ],
+  "extraRewards" : "@cya@Chest rate bonus..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mob Killer I",
+  "description" : "Kill 1,000 NPCs",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 989,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Coins x 500K\\nCrystal key x 2",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Dragon Hunter I",
+  "description" : "Kill 25 Dragons",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 100000
+  }, {
+    "id" : 537,
+    "amount" : 40
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 100K\\nDragon bones x 40\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Boss Hunter I",
+  "description" : "Kill 100 Bosses",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 250000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 250K\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fishing I",
+  "description" : "Catch 1,000 Fish",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 100000
+  }, {
+    "id" : 13258,
+    "amount" : 1
+  }, {
+    "id" : 13261,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 100K\\nAngler hat x 1\\nAngler boots x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Cooking I",
+  "description" : "Cook 1,000 Fish",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 50000
+  }, {
+    "id" : 3145,
+    "amount" : 100
+  } ],
+  "extraRewards" : "Coins x 50K\\nCooked karambwan x 100",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mining I",
+  "description" : "Mine 1,000 Rocks",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 100000
+  }, {
+    "id" : 12013,
+    "amount" : 1
+  }, {
+    "id" : 12016,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 100K\\nProspector helmet x 1\\nProspector boots x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Smithing I",
+  "description" : "Smith 1,000 Bars",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 350000
+  }, {
+    "id" : 2360,
+    "amount" : 300
+  } ],
+  "extraRewards" : "Coins x 350K\\nMithril bar x 300",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Farming I",
+  "description" : "Harvest 500 Crops",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 250000
+  }, {
+    "id" : 13646,
+    "amount" : 1
+  }, {
+    "id" : 13644,
+    "amount" : 1
+  }, {
+    "id" : 5304,
+    "amount" : 5
+  }, {
+    "id" : 5300,
+    "amount" : 5
+  }, {
+    "id" : 5295,
+    "amount" : 5
+  } ],
+  "extraRewards" : "Coins x 250K\\nFarmer's strawhat x 1\\nFarmer's boots x 1\\nTorstol seed x 5\\nSnapdragon seed x 5\\nRanarr seed x 5",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Herblore I",
+  "description" : "Create 500 Potions",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 100000
+  }, {
+    "id" : 220,
+    "amount" : 10
+  }, {
+    "id" : 3052,
+    "amount" : 10
+  }, {
+    "id" : 208,
+    "amount" : 10
+  } ],
+  "extraRewards" : "Coins x 100K\\nTorstol x 10\\nGrimy snapdragon x 10\\nGrimy ranarr noted x ..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Woodcutting I",
+  "description" : "Cut 1,000 Trees",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 100000
+  }, {
+    "id" : 10941,
+    "amount" : 1
+  }, {
+    "id" : 10933,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 100K\\nLumberjack hat x 1\\nLumberjack boots x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fletching I",
+  "description" : "Fletch 1,000 Logs",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 100000
+  }, {
+    "id" : 63,
+    "amount" : 150
+  }, {
+    "id" : 1778,
+    "amount" : 100
+  } ],
+  "extraRewards" : "Coins x 100K\\nMaple longbow (u) x 1..\\nBow string x 100",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Firemaking I",
+  "description" : "Light 500 Logs",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 10000
+  }, {
+    "id" : 20710,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 10K\\nPyromancer boots x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Thieving I",
+  "description" : "Steal 500 Times",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 100000
+  }, {
+    "id" : 5557,
+    "amount" : 1
+  }, {
+    "id" : 5556,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 100K\\nRogue boots x 1\\nRogue gloves x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Agility I",
+  "description" : "Complete v Agility\\nCourse Laps",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 50000
+  }, {
+    "id" : 11849,
+    "amount" : 5
+  }, {
+    "id" : 12792,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 50K\\nMark of grace x 5\\nGraceful Recolour x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Slayer I",
+  "description" : "Complete 50 Slayer Tasks",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 450000
+  }, {
+    "id" : 405,
+    "amount" : 2
+  }, {
+    "id" : 7629,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Coins x 450K\\nCasket x 2\\n2x Slayer Points Scro..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Crystal Clear I",
+  "description" : "Loot Crystal Chest 50 Times",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 990,
+    "amount" : 4
+  } ],
+  "extraRewards" : "Coins x 500K\\nCrystal key x 4",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Pest Control I",
+  "description" : "Complete Pest Control\\n50 Times",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  }, {
+    "id" : 8841,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 500K\\nCasket x 1\\nVoid knight mace x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fight Caves I",
+  "description" : "Complete the Fight Caves",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 500K\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Barrows I",
+  "description" : "Kill 100 barrows npcs",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 150000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 150K\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Treasure Trails I",
+  "description" : "Loot 50 Clue Caskets",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 250000
+  } ],
+  "extraRewards" : "Coins x 250K",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Democracy I",
+  "description" : "Open 1 Vote Chest",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 23933,
+    "amount" : 5
+  } ],
+  "extraRewards" : "Coins x 500K\\nVote Crystal x 5",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Competitor",
+  "description" : "Enter 5 Outlast\\nTournaments",
+  "claimed" : false,
+  "taskDifficulty" : "BEGINNER",
+  "rewards" : [ {
+    "id" : 989,
+    "amount" : 1
+  }, {
+    "id" : 11739,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Crystal key x 1\\nVote Mystery Box x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mob Killer II",
+  "description" : "Kill 3,000 NPCs",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 1M\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Dragon Hunter II",
+  "description" : "Kill 350 Dragons",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 537,
+    "amount" : 60
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 500K\\nDragon bones x 60\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Boss Hunter II",
+  "description" : "Kill 700 Bosses",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 405,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Coins x 1M\\nCasket x 2",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fishing II",
+  "description" : "Catch 2,500 Fish",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 13259,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 500K\\nAngler top x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Cooking II",
+  "description" : "Cook 2,500 Fish",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 350000
+  }, {
+    "id" : 13441,
+    "amount" : 75
+  } ],
+  "extraRewards" : "Coins x 350K\\nAnglerfish x 75",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mining II",
+  "description" : "Mine 2,500 Rocks",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 400000
+  }, {
+    "id" : 12015,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 400K\\nProspector legs x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Smithing II",
+  "description" : "Smelt or Smith 2,500 Bars",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1250000
+  }, {
+    "id" : 2362,
+    "amount" : 300
+  } ],
+  "extraRewards" : "Coins x 1.25M\\nAdamantite bar x 300",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Farming II",
+  "description" : "Harvest 2,500 Crops",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 13640,
+    "amount" : 1
+  }, {
+    "id" : 5304,
+    "amount" : 15
+  }, {
+    "id" : 5300,
+    "amount" : 15
+  }, {
+    "id" : 5295,
+    "amount" : 15
+  } ],
+  "extraRewards" : "Coins x 500K\\nFarmer's boro trouser..\\nTorstol seed x 15\\nSnapdragon seed x 15\\nRanarr seed x 15",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Herblore II",
+  "description" : "Create 1,000 Potions",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 300000
+  }, {
+    "id" : 220,
+    "amount" : 40
+  }, {
+    "id" : 3052,
+    "amount" : 40
+  }, {
+    "id" : 208,
+    "amount" : 40
+  } ],
+  "extraRewards" : "Coins x 300K\\nTorstol x 40\\nGrimy snapdragon x 40\\nGrimy ranarr noted x ..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Woodcutting II",
+  "description" : "Cut 2,500 Trees",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 10939,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 300000
+  } ],
+  "extraRewards" : "Lumberjack top x 1\\nCoins x 300K",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fletching II",
+  "description" : "Fletch 2,500 Logs",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 67,
+    "amount" : 225
+  } ],
+  "extraRewards" : "Coins x 500K\\nYew longbow (u) x 225",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Firemaking II",
+  "description" : "Light 1,000 Logs",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 20706,
+    "amount" : 1
+  }, {
+    "id" : 20704,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 500K\\nPyromancer robe x 1\\nPyromancer garb x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Thieving II",
+  "description" : "Steal 1,000 Times",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 450000
+  }, {
+    "id" : 5555,
+    "amount" : 1
+  }, {
+    "id" : 5553,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 450K\\nRogue trousers x 1\\nRogue top x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Agility II",
+  "description" : "Complete 250 Agility\\nCourse Laps",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 400000
+  }, {
+    "id" : 989,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Coins x 400K\\nCrystal key x 2",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Slayer II",
+  "description" : "Complete 80 Slayer Tasks",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1500000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  }, {
+    "id" : 7629,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Coins x 1.5M\\nCasket x 1\\n2x Slayer Points Scro..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Crystal Clear II",
+  "description" : "Loot Crystal Chest 100 Times",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2000000
+  }, {
+    "id" : 990,
+    "amount" : 8
+  } ],
+  "extraRewards" : "Coins x 2M\\nCrystal key x 8",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fight Caves II",
+  "description" : "Complete Fight Caves 5 Times",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 500000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  }, {
+    "id" : 6570,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Coins x 500K\\nCasket x 1\\nFire cape x 2",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Treasure Trails II",
+  "description" : "Loot 120 Clue Caskets",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1700000
+  } ],
+  "extraRewards" : "Coins x 1.7M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Democracy II",
+  "description" : "Open 2 Vote Chests",
+  "claimed" : false,
+  "taskDifficulty" : "INTERMEDIATE",
+  "rewards" : [ {
+    "id" : 6199,
+    "amount" : 1
+  }, {
+    "id" : 11739,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Mystery box x 1\\nVote Mystery Box x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mob Killer III",
+  "description" : "Kill 10,000 NPCs",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2000000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 2M\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Dragon Hunter III",
+  "description" : "Kill 950 Dragons",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1500000
+  }, {
+    "id" : 405,
+    "amount" : 1
+  }, {
+    "id" : 537,
+    "amount" : 150
+  } ],
+  "extraRewards" : "Coins x 1.5M\\nCasket x 1\\nDragon bones x 150",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Boss Hunter III",
+  "description" : "Kill 1,500 Bosses",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 3000000
+  }, {
+    "id" : 405,
+    "amount" : 6
+  } ],
+  "extraRewards" : "Coins x 3M\\nCasket x 6",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fishing III",
+  "description" : "Catch 5,000 Fish",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 13260,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 1M\\nAngler waders x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Cooking III",
+  "description" : "Cook 5,000 Fish",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 13441,
+    "amount" : 350
+  } ],
+  "extraRewards" : "Coins x 1M\\nAnglerfish x 350",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mining III",
+  "description" : "Mine 5,000 Rocks",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2500000
+  }, {
+    "id" : 12014,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 2.5M\\nProspector jacket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Smithing III",
+  "description" : "Smelt or Smith 5,000 Bars",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 2364,
+    "amount" : 300
+  } ],
+  "extraRewards" : "Coins x 1M\\nRunite bar x 300",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Farming III",
+  "description" : "Harvest 5,000 Crops",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2500000
+  }, {
+    "id" : 7409,
+    "amount" : 1
+  }, {
+    "id" : 13642,
+    "amount" : 1
+  }, {
+    "id" : 5304,
+    "amount" : 35
+  }, {
+    "id" : 5300,
+    "amount" : 35
+  }, {
+    "id" : 5295,
+    "amount" : 35
+  } ],
+  "extraRewards" : "Coins x 2.5M\\nMagic secateurs x 1\\nFarmer's jacket x 1\\nTorstol seed x 35\\nSnapdragon seed x 35\\nRanarr seed x 35",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Herblore III",
+  "description" : "Create 2,500 Potions",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 220,
+    "amount" : 125
+  }, {
+    "id" : 3052,
+    "amount" : 125
+  }, {
+    "id" : 208,
+    "amount" : 125
+  } ],
+  "extraRewards" : "Coins x 1M\\nTorstol x 125\\nGrimy snapdragon x 125\\nGrimy ranarr noted x ..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Woodcutting III",
+  "description" : "Cut 5,000 Trees",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2000000
+  }, {
+    "id" : 10940,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 2M\\nLumberjack legs x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fletching III",
+  "description" : "Fletch 5,000 Logs",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 71,
+    "amount" : 750
+  }, {
+    "id" : 1778,
+    "amount" : 200
+  } ],
+  "extraRewards" : "Coins x 1M\\nMagic longbow (u) x 7..\\nBow string x 200",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Firemaking III",
+  "description" : "Light 2,500 Logs",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 20708,
+    "amount" : 1
+  }, {
+    "id" : 20712,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 1M\\nPyromancer hood x 1\\nWarm gloves x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Thieving III",
+  "description" : "Steal 3,000 Times",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 1000000
+  }, {
+    "id" : 5554,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 1M\\nRogue mask x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Agility III",
+  "description" : "Complete 300 Rooftop Agility\\nCourse Laps",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2000000
+  }, {
+    "id" : 989,
+    "amount" : 3
+  } ],
+  "extraRewards" : "Coins x 2M\\nCrystal key x 3",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Slayer III",
+  "description" : "Complete 150 Slayer Tasks",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 5000000
+  }, {
+    "id" : 13438,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 5M\\nSlayer mystery Chest ..",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Crystal Clear III",
+  "description" : "Loot Crystal Chest 200 Times",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 3500000
+  }, {
+    "id" : 990,
+    "amount" : 14
+  } ],
+  "extraRewards" : "Coins x 3.5M\\nCrystal key x 14",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fight Caves III",
+  "description" : "Complete Fight Caves 10 Times",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2500000
+  }, {
+    "id" : 6570,
+    "amount" : 3
+  }, {
+    "id" : 405,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 2.5M\\nFire cape x 3\\nCasket x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Barrows III",
+  "description" : "Kill 750 npcs at barrows",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 10000000
+  }, {
+    "id" : 405,
+    "amount" : 3
+  } ],
+  "extraRewards" : "Coins x 10M\\nCasket x 3",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Treasure Trails III",
+  "description" : "Loot 180 Clue Caskets",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 2000000
+  }, {
+    "id" : 20164,
+    "amount" : 1
+  }, {
+    "id" : 6666,
+    "amount" : 1
+  } ],
+  "extraRewards" : "Coins x 2M\\nLarge spade x 1\\nFlippers x 1",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Democracy III",
+  "description" : "Open 5 Vote Chests",
+  "claimed" : false,
+  "taskDifficulty" : "EXPERT",
+  "rewards" : [ {
+    "id" : 995,
+    "amount" : 10000000
+  }, {
+    "id" : 11739,
+    "amount" : 2
+  }, {
+    "id" : 6199,
+    "amount" : 2
+  } ],
+  "extraRewards" : "Coins x 10M\\nVote Mystery Box x 2\\nMystery box x 2",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Hespori",
+  "description" : "Finish 20 Hespori\\nEvents",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 22374,
+    "amount" : 8
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Hespori Key x 8\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "The Nightmare",
+  "description" : "Kill 100 Nightmare",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 6828,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Super Mystery Box x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Alchemical Hydra",
+  "description" : "Kill 100 Hydra",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 6828,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Super Mystery Box x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mimic",
+  "description" : "Kill 20 Mimics",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 6199,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Mystery box x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Hunllef",
+  "description" : "Kill 25 Hunllefs",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 23776,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Hunllef's Key x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Tob Champion",
+  "description" : "Complete 50 Theatre\\nof Blood runs (Raids 2)",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 13346,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Ultra Mystery Box x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Cox Champion",
+  "description" : "Complete 100 Chamber\\nof Xeric runs (Raids 1)",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 6828,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Super Mystery Box x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Fire Of Exchange",
+  "description" : "Burn 150,000 Exchange\\nPoints",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 30010,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Postie Pete x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Wildy Event",
+  "description" : "Finish 15\\nWildy Events",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 4185,
+    "amount" : 4
+  }, {
+    "id" : 6792,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "The Unbearable's Key ..\\nSeren's Key x 1\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Mage Arena II",
+  "description" : "Complete 1\\nMage Arena II",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 2528,
+    "amount" : 4
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Experience Lamp x 4\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+}, {
+  "title" : "Max",
+  "description" : "Achieve level 99 in\\nall skills",
+  "claimed" : false,
+  "taskDifficulty" : "LEGENDARY",
+  "rewards" : [ {
+    "id" : 13346,
+    "amount" : 1
+  }, {
+    "id" : 691,
+    "amount" : 1
+  }, {
+    "id" : 995,
+    "amount" : 10000000
+  } ],
+  "extraRewards" : "Ultra Mystery Box x 1\\n10,000 FoE Point Cert..\\nCoins x 10M",
+  "progress" : [ "0/1" ]
+} ]
